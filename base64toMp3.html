@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload and Play Audio Blob</title>
+</head>
+<body>
+    <h1>Upload and Play Audio Blob</h1>
+    
+    <input type="file" id="audioFile" accept="audio/*" />
+    <button id="playButton">Play Audio</button>
+    
+    <audio id="audioPlayer" controls></audio>
+
+    <script>
+        document.getElementById("playButton").addEventListener("click", function() {
+            var input = document.getElementById("audioFile");
+            
+            if (input.files.length === 0) {
+                alert("Please select an audio file.");
+                return;
+            }
+
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function(event) {
+                var blob = new Blob([event.target.result], { type: file.type });
+                var blobUrl = URL.createObjectURL(blob);
+
+                var audioPlayer = document.getElementById("audioPlayer");
+                audioPlayer.src = blobUrl;
+                audioPlayer.play();
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
+</body>
+</html>
