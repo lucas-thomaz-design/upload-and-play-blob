@@ -8,8 +8,9 @@
     
     <input type="file" id="audioFile" accept="audio/*" />
     <button id="playButton">Play Audio</button>
+    <a id="downloadLink" >Download MP3</a>
     
-    <audio id="audioPlayer" controls></audio>
+    <audio id="audioPlayer" controls></audio> 
 
     <script>
         document.getElementById("playButton").addEventListener("click", function() {
@@ -30,6 +31,13 @@
                 var audioPlayer = document.getElementById("audioPlayer");
                 audioPlayer.src = blobUrl;
                 audioPlayer.play();
+
+                var downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = blobUrl;
+                downloadLink.style.display = "block";
+                downloadLink.download = "audio.mp3";
+                downloadLink.textContent = "Download MP3";
+                
             };
 
             reader.readAsArrayBuffer(file);
