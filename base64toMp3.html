@@ -1,19 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload and Play Audio Blob</title>
+    <title>Escute histórias maravilhosas</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/materialize-css@1.0.0/dist/css/materialize.min.css">
 </head>
 <body>
-    <h1>Upload and Play Audio Blob</h1>
-    
-    <input type="file" id="audioFile" accept="audio/*" />
-    <button id="playButton">Play Audio</button>
-    <a id="downloadLink" >Download MP3</a>
-    
-    <audio id="audioPlayer" controls></audio> 
+    <div class="container">
+        <h1 class="center-align">Escute histórias maravilhosas</h1>
+        
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Choose Audio</span>
+                <input type="file" id="audioFile" accept="audio/*"  />
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Select audio file">
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col s12 m6">
+                <button class="btn waves-effect waves-light" id="playButton">Play Selected Audio<i class="material-icons left">play_arrow</i></button>
+            </div>
+            <div class="col s12 m6">
+                <audio id="audioPlayer" controls></audio>
+            </div>
+        </div>
+        
+        <div class="input-field">
+            <select id="audioSelect">
+                <option value="" disabled selected>Select an audio to play</option>
+            </select>
+        </div>
+        
+        
+
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Player</th>
+                </tr>
+            </thead>
+            <tbody id="audioTable"></tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
     <script>
-        document.getElementById("playButton").addEventListener("click", function() {
+        var audioFiles = [];
+
+        // Replace with the raw GitHub URL of your audio files folder
+        var audioFilesBaseUrl = "https://lucas-thomaz-design.github.io/upload-and-play-blob/";
+
+        // Function to load audio files from the server
+        function loadAudioFiles() {
+            // Add your audio file URLs here
+            var sampleFiles = [
+              "bebe joao.mp3",
+"bebe-risada.mp3",
+"bob joga bola.mp3",
+"brigadeiro.mp3",
+"cade vc robinson.mp3",
+"joao que virou lucas.mp3",
+"nunca maltrate o meio ambiente.mp3",
+"robison.mp3",
+"uau varios cachorros.mp3",
+"uau-sorvete.mp3",
+                // ... add more audio file names here ...
+            ];
+
+            sampleFiles.forEach(function(filename) {
+                var audioUrl = audioFilesBaseUrl + filename;
+                audioFiles.push({
+                    url: audioUrl,
+                    name: filename
+                });
+            });
+
+            updateAudioTable();
+            
+        }
+
+        // Call the function to load audio files from the server
+        loadAudioFiles();
+
+        function updateAudioTable() {
+            var audioTableBody = document.querySelector("#audioTable");
+            audioTableBody.innerHTML = "";
+
+            audioFiles.forEach(function(audio, index) {
+                var row = audioTableBody.insertRow();
+                var nameCell = row.insertCell(0);
+                var playerCell = row.insertCell(1);
+
+                nameCell.textContent = audio.name;
+
+                var audioPlayer = document.createElement("audio");
+                audioPlayer.controls = true;
+                audioPlayer.src = audio.url;
+                playerCell.appendChild(audioPlayer);
+            });
+        }
+
+   
+
+  
+
+            document.getElementById("playButton").addEventListener("click", function() {
             var input = document.getElementById("audioFile");
             
             if (input.files.length === 0) {
@@ -32,11 +127,6 @@
                 audioPlayer.src = blobUrl;
                 audioPlayer.play();
 
-                var downloadLink = document.getElementById("downloadLink");
-                downloadLink.href = blobUrl;
-                downloadLink.style.display = "block";
-                downloadLink.download = "audio.mp3";
-                downloadLink.textContent = "Download MP3";
                 
             };
 
